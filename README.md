@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Interior Analyzer
+
+AI-powered interior measurement and design tool for architectural professionals.
+
+## Overview
+
+Interior Analyzer processes room photographs to extract spatial measurements, detect objects, and apply AI-driven design edits. Built as part of the Vitruvi AI tool suite for the AEC (Architecture, Engineering, and Construction) sector.
+
+## Features
+
+- Room analysis — estimated dimensions (L x W x H), floor area, and object detection from a single photo
+- Calibration input — optional known measurement anchor for improved accuracy
+- Image editing — object removal, object addition, and material/finish swap
+- Edit history — stacked edits with undo and restart
+- Dimension annotation — AI-drawn architectural dimension lines overlaid on the room photo
+- Voice input — speak edit instructions via Web Speech API
+- PDF export — structured measurement report
+
+## Tech Stack
+
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Google Gemini API (gemini-2.5-flash, gemini-3.1-flash-image-preview)
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies:
+   npm install
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+3. Create a .env.local file at the project root:
+   GEMINI_API_KEY=your_key_here
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Start the development server:
+   npm run dev
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+5. Open http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
 
-## Learn More
+| Variable | Description | Required |
+|---|---|---|
+| GEMINI_API_KEY | Google Gemini API key | Yes |
+| ALLOWED_ORIGIN | Allowed CORS origin for production | No |
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+src/
+  app/
+    api/
+      analyze/     Room analysis API route
+      edit/        Image editing API route
+      annotate/    Dimension annotation API route
+    page.tsx       Main application page
+    layout.tsx     Root layout
+  components/
+    AppHeader      Navigation header
+    AnalysisResults  Analysis output display
+    ImageViewer    Photo display with annotation overlay
+    EditPanel      Edit controls and history management
+  types/           Shared TypeScript types
+  utils/           PDF export utility
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
+Deployed on Vercel. Configure environment variables in the Vercel project dashboard before deploying.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+API routes use Edge runtime for image processing endpoints to support long-running Gemini requests.

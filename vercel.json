@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "src/app/api/analyze/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/edit/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/annotate/route.ts": {
+      "maxDuration": 60
+    }
+  }
+}

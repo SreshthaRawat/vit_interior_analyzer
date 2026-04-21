@@ -1,5 +1,9 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
+# Agent Guidance
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
+This project may use Next.js behavior that differs from common defaults and older examples.
+
+Before making framework-level changes:
+
+- Review the relevant documentation in `node_modules/next/dist/docs/`.
+- Follow current API conventions used in this codebase.
+- Respect deprecation guidance and avoid introducing deprecated patterns.
