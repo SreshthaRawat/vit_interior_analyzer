@@ -141,16 +141,48 @@ export default function Home() {
       formData.append("analysisContext", JSON.stringify(analysisResult));
 
       const res = await fetch("/api/edit", { method: "POST", body: formData });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Edit failed");
+      let json: Record<string, unknown>;
+      try {
+        const text = await res.text();
+        json = JSON.parse(text);
+      } catch {
+        throw new Error(
+          "The server returned an unexpected response. Please try again.",
+        );
+      }
 
-      const byteString = atob(json.result.imageData);
+      if (!res.ok) {
+        throw new Error(
+          typeof json.error === "string"
+            ? json.error
+            : "Request failed. Please try again.",
+        );
+      }
+
+      const result = json.result;
+      if (!result || typeof result !== "object") {
+        throw new Error("Edit failed");
+      }
+
+      const imageData =
+        typeof (result as { imageData?: unknown }).imageData === "string"
+          ? (result as { imageData: string }).imageData
+          : null;
+      if (!imageData) {
+        throw new Error("Edit failed");
+      }
+      const mimeType =
+        typeof (result as { mimeType?: unknown }).mimeType === "string"
+          ? (result as { mimeType: string }).mimeType
+          : "image/png";
+
+      const byteString = atob(imageData);
       const ab = new ArrayBuffer(byteString.length);
       const ia = new Uint8Array(ab);
       for (let i = 0; i < byteString.length; i += 1) {
         ia[i] = byteString.charCodeAt(i);
       }
-      const blob = new Blob([ab], { type: json.result.mimeType || "image/png" });
+      const blob = new Blob([ab], { type: mimeType });
       const newUrl = URL.createObjectURL(blob);
 
       setEditHistory((prev) => [...prev, newUrl]);
@@ -191,17 +223,49 @@ export default function Home() {
         method: "POST",
         body: formData,
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Annotation failed");
+      let json: Record<string, unknown>;
+      try {
+        const text = await res.text();
+        json = JSON.parse(text);
+      } catch {
+        throw new Error(
+          "The server returned an unexpected response. Please try again.",
+        );
+      }
 
-      const byteString = atob(json.result.imageData);
+      if (!res.ok) {
+        throw new Error(
+          typeof json.error === "string"
+            ? json.error
+            : "Request failed. Please try again.",
+        );
+      }
+
+      const result = json.result;
+      if (!result || typeof result !== "object") {
+        throw new Error("Annotation failed");
+      }
+
+      const imageData =
+        typeof (result as { imageData?: unknown }).imageData === "string"
+          ? (result as { imageData: string }).imageData
+          : null;
+      if (!imageData) {
+        throw new Error("Annotation failed");
+      }
+      const mimeType =
+        typeof (result as { mimeType?: unknown }).mimeType === "string"
+          ? (result as { mimeType: string }).mimeType
+          : "image/png";
+
+      const byteString = atob(imageData);
       const ab = new ArrayBuffer(byteString.length);
       const ia = new Uint8Array(ab);
       for (let i = 0; i < byteString.length; i += 1) {
         ia[i] = byteString.charCodeAt(i);
       }
       const blob = new Blob([ab], {
-        type: json.result.mimeType || "image/png",
+        type: mimeType,
       });
       const newUrl = URL.createObjectURL(blob);
 
@@ -228,8 +292,24 @@ export default function Home() {
 
     try {
       const res = await fetch("/api/analyze", { method: "POST", body: formData });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || "Analysis failed");
+      let json: Record<string, unknown>;
+      try {
+        const text = await res.text();
+        json = JSON.parse(text);
+      } catch {
+        throw new Error(
+          "The server returned an unexpected response. Please try again.",
+        );
+      }
+
+      if (!res.ok) {
+        throw new Error(
+          typeof json.error === "string"
+            ? json.error
+            : "Request failed. Please try again.",
+        );
+      }
+
       setAnalysisResult(json.result as AnalysisResult);
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
