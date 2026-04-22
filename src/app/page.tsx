@@ -501,6 +501,12 @@ export default function Home() {
                       placeholder="e.g. 2.1"
                       value={calibrationValue}
                       onChange={(e) => setCalibrationValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key !== "Enter") return;
+                        e.preventDefault();
+                        if (isAnalyzing) return;
+                        void handleAnalyze();
+                      }}
                       className="w-full bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-lg px-3 py-2.5 pr-12 font-mono text-sm text-[var(--color-text)] focus:border-[var(--color-accent)] focus:outline-none"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 font-mono text-xs text-[var(--color-muted)]">
